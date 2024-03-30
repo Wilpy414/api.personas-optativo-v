@@ -9,9 +9,9 @@ namespace Repository.Data
     public interface InterfacePersona
     {
         bool add(PersonaModel persona);
-        bool remove(PersonaModel persona);
+        bool remove(string persona);
         bool update(PersonaModel persona);
-        PersonaModel get(int id);
+        PersonaModel get(string id);
         IEnumerable<PersonaModel> list();
 
     }
