@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Dapper;
+using Npgsql;
 
 namespace Repository.Data
 {
@@ -19,7 +20,7 @@ namespace Repository.Data
         {
             try
             {
-                if(conexionDB.Execute("insert into Persona(nombre, apellido, cedula) values(@nombre, @apellido, @cedula)", persona) > 0)
+                if(conexionDB.Execute("insert into Persona(nombre, apellido, cedula) values (@nombre, @apellido, @cedula)", persona) > 0)
                     return true;
                 else
                     return false;
@@ -30,24 +31,58 @@ namespace Repository.Data
             }
         }
 
-        public PersonaModel get(int id)
+        public PersonaModel get(string cedula)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return conexionDB.Query<PersonaModel>("Select * from Persona where cedula = @cedula", new { cedula }).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public IEnumerable<PersonaModel> list()
         {
-            throw new NotImplementedException();
+            try
+            {
+                return conexionDB.Query<PersonaModel>("Select * from Persona");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
-        public bool remove(PersonaModel persona)
+        public bool remove(string cedula)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (conexionDB.Execute("Delete from Persona where cedula = @cedula", new { cedula }) > 0)
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public bool update(PersonaModel persona)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (conexionDB.Execute("Update Persona set nombre = @nombre, apellido = @apellido where cedula = @cedula", persona) > 0)
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }
